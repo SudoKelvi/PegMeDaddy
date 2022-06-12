@@ -48,23 +48,21 @@ if __name__ == "__main__":
                         help='Height of the pegboard in inches. For keeping the holes centered with the pegboard, make this a multiple of the hole distance.')
     parser.add_argument('filename', type=str,
                         help='Path to the output file. Th extension implies the output format.')
-    parser.add_argument('--hole_diameter', '-d', type=float, default=1,
+    parser.add_argument('--hole_diameter', '-d', type=float, default=1/4,
                         help='Diameter of the peg holes, "small" creates 1/8 inch holes. "large" create 1/4 inch holes.')
     parser.add_argument('--hole_spacing', '-s', type=float, default=1,
                         help='Distance between pegboard holes in inches.')
-    parser.add_argument('--buffer', '-b', type=float, default=in2mm(1/4), 
+    parser.add_argument('--buffer', '-b', type=float, default=1/4, 
                         help='Buffer between the edge of the pegboard and the holes.' )
-    parser.add_argument('--fillet', '-f', type=float, default=in2mm(1/4), 
-                        help='Fillet of the corners in inches' )
-    parser.add_argument('--thickness', '-t', type=float, default=in2mm(1/8), 
+    parser.add_argument('--fillet', '-f', type=float, default=1/4, 
+                        help='Fillet of the corners in inches')
+    parser.add_argument('--thickness', '-t', type=float, default=1/8, 
                         help='Thickness of the board, only appplies to 3d output formats like STL.')
     
-    
-
     args = parser.parse_args()
     
-    hole_spacing = args.hole_spacing
-    hole_diameter = args.hole_diameter
+    hole_spacing = in2mm(args.hole_spacing)
+    hole_diameter = in2mm(args.hole_diameter)
     
     width = in2mm(args.width)
     height = in2mm(args.height)
@@ -80,6 +78,14 @@ if __name__ == "__main__":
     xpoints = frange(-nwidth/2, nwidth/2+1, hole_spacing)
     points = list(itertools.product(xpoints, ypoints))
     
+    # print("width:", width)
+    # print("height:", width)
+    # print("thickness:", thickness)
+    # print("fillet:", fillet)
+    # print("buffer:", buffer)
+    # print("hole_diameter:", hole_diameter)
+    # print("hole_spacing:", hole_spacing)
+
     turtwig = (cq.Sketch()
                   .rect(width, height)
                   .vertices()
